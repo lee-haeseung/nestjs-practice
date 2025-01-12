@@ -1,4 +1,12 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 /**
@@ -61,7 +69,27 @@ export class PostsController {
     if (!post) {
       throw new NotFoundException();
     }
-    
+
+    return post;
+  }
+
+  @Post()
+  createPost(
+    @Body('author') author: string,
+    @Body('title') title: string,
+    @Body('content') content: string,
+  ) {
+    const post: PostModel = {
+      id: posts[posts.length - 1].id + 1,
+      author,
+      title,
+      content,
+      likeCount: 0,
+      commentCount: 0,
+    };
+
+    posts = [...posts, post];
+
     return post;
   }
 }
