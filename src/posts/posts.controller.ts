@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 /**
@@ -9,26 +9,53 @@ import { PostsService } from './posts.service';
  * commentCount: number;
  */
 
-interface Post {
+interface PostModel {
+  id: number;
   author: string;
   title: string;
   content: string;
-  listCount: number;
+  likeCount: number;
   commentCount: number;
 }
+
+let posts: PostModel[] = [
+  {
+    id: 1,
+    author: 'lee1',
+    title: 'wow',
+    content: 'qq',
+    likeCount: 100,
+    commentCount: 232,
+  },
+  {
+    id: 2,
+    author: 'lee2',
+    title: 'wow',
+    content: 'qq',
+    likeCount: 100,
+    commentCount: 232,
+  },
+  {
+    id: 3,
+    author: 'lee3',
+    title: 'wow',
+    content: 'qq',
+    likeCount: 100,
+    commentCount: 232,
+  },
+];
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
- 
-@Get()
-getPost(): Post {
-  return {
-    author: "asdssfasdf",
-    title: "asdf",
-    content: "qwerdaaaaaaaaaaaaaaaa",
-    listCount: 1,
-    commentCount: 1
-  };
-}
+
+  @Get()
+  getPosts(): PostModel[] {
+    return posts;
+  }
+
+  @Get('/:id')
+  getPost(@Param('id') id: string): PostModel {
+    return posts.find((post) => post.id === +id);
+  }
 }
